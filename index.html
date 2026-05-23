@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tudo Com Laser</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#D4AF37',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-elegant { font-family: 'Playfair Display', serif; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes story-progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .animate-story-progress {
+            animation: story-progress 4000ms linear forwards;
+        }
+
+        @keyframes pulse-whatsapp {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        .btn-whatsapp-pulse { animation: pulse-whatsapp 2s infinite ease-in-out; }
+
+        @keyframes laser-sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+        .laser-effect-container { position: relative; overflow: hidden; }
+        .laser-effect-container::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            z-index: 0; animation: laser-sweep 3s infinite linear;
+        }
+        .laser-effect-line {
+            position: absolute; bottom: 0; left: 0; width: 50%; height: 2px;
+            background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+            animation: laser-sweep 3s infinite linear; box-shadow: 0 0 8px #D4AF37; z-index: 10;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-scroll { animation: scroll 20s linear infinite; }
+        .animate-scroll:hover { animation-play-state: paused; }
+
+        @keyframes laser-scan-vertical {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+        .animate-laser-scan-vertical {
+            animation: laser-scan-vertical 1.2s ease-in-out infinite alternate;
+        }
+    </style>
+</head>
+
+<body class="bg-[#f8f9fa] dark:bg-[#0a0a0a] text-slate-900 dark:text-white selection:bg-[#D4AF37] selection:text-black transition-colors duration-300 overflow-x-hidden">
+    <div class="min-h-screen flex relative">
+        
+        <!-- SIDEBAR -->
+        <aside class="fixed inset-y-0 left-0 z-50 w-[100px] sm:w-[130px] md:w-64 bg-[#ffffff] dark:bg-[#121212] border-r border-slate-200 dark:border-[#262626] flex flex-col transition-all duration-300 ease-in-out shadow-xl md:shadow-none">
+            <div class="p-3 md:p-6 border-b border-slate-200 dark:border-[#262626] flex flex-col items-center gap-2 md:gap-3">
+                <img src="https://i.imgur.com/fWLcqLl.jpg" alt="Logo" class="w-12 h-12 md:w-24 md:h-24 rounded-full object-cover shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
+                <div class="text-center w-full">
+                    <span class="font-semibold text-[9px] md:text-sm tracking-widest uppercase block text-slate-500 dark:text-gray-300 leading-none">Tudo Com</span>
+                    <span class="font-bold text-[11px] md:text-2xl text-[#D4AF37] block mt-0.5 md:mt-1 drop-shadow-md leading-none">Laser</span>
+                </div>
+
+                <!-- Theme and Insta Buttons -->
+                <div class="w-full flex flex-row gap-1.5 md:gap-2 mt-1 md:mt-2">
+                    <button onclick="toggleTheme()" class="flex-1 flex flex-col md:flex-row justify-center items-center gap-1 md:gap-1.5 p-1.5 md:p-2 rounded-lg md:rounded-xl transition-colors font-medium text-slate-600 dark:text-neutral-300 bg-slate-100 hover:bg-slate-200 dark:bg-[#1a1a1a]/50 dark:hover:bg-[#1a1a1a]">
+                        <i data-lucide="sun" id="theme-icon" class="w-4 h-4 md:w-4 md:h-4"></i>
+                        <span id="theme-text" class="text-[8px] md:text-xs leading-none">Escuro</span>
+                    </button>
+                    <a href="https://www.instagram.com/tudocomlaser/" target="_blank" rel="noopener noreferrer" class="flex-1 flex flex-col md:flex-row justify-center items-center gap-1 md:gap-1.5 p-1.5 md:p-2 rounded-lg md:rounded-xl transition-colors font-medium text-slate-600 dark:text-neutral-300 bg-slate-100 hover:bg-slate-200 dark:bg-[#1a1a1a]/50 dark:hover:bg-[#1a1a1a]">
+                        <i data-lucide="instagram" class="w-4 h-4 md:w-4 md:h-4"></i>
+                        <span class="text-[8px] md:text-xs leading-none">Insta</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav id="nav-container" class="flex-1 overflow-y-auto py-4 md:py-6 px-2 md:px-4 space-y-1.5 md:space-y-2 no-scrollbar">
+                <!-- Injected via JS -->
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 w-full ml-[100px] sm:ml-[130px] md:ml-64 flex flex-col min-h-screen transition-all duration-300">
+            <div id="content-container" class="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-6 md:px-8 py-6 md:py-12">
+                <!-- Injected via JS -->
+            </div>
+        </main>
+
+        <!-- FLOATING WHATSAPP BUTTON -->
+        <button onclick="handleRedirectWhatsApp('', null)" class="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-[45] flex items-center gap-2 bg-[#25D366] text-white px-4 py-3 md:px-5 md:py-3.5 rounded-full font-semibold shadow-[0_4px_15px_rgba(37,211,102,0.4)] hover:bg-[#20bd5a] transition-all duration-300 border-none btn-whatsapp-pulse cursor-pointer">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="md:w-6 md:h-6" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.405-.883-.733-1.48-1.638-1.653-1.935-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+            </svg>
+            <span class="text-sm md:text-base hidden sm:inline">Faça o seu orçamento</span>
+            <span class="text-[11px] sm:hidden font-bold">Orçamento</span>
+        </button>
+
+        <!-- MODAL CONTAINERS -->
+        <div id="product-modal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-black/90 backdrop-blur-sm" onclick="closeModals(event)">
+            <!-- Injected via JS -->
+        </div>
+
+        <div id="fullscreen-modal" class="hidden fixed inset-0 z-[110] items-center justify-center bg-black/95 backdrop-blur-md" onclick="closeModals(event)">
+            <button onclick="setFullscreenImage(null)" class="absolute top-4 right-4 md:top-8 md:right-8 z-50 p-2 md:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div id="fullscreen-content" class="w-full h-full flex items-center justify-center p-2 md:p-8 pointer-events-none"></div>
+        </div>
+
+        <div id="redirecting-modal" class="hidden fixed inset-0 z-[200] flex-col items-center justify-center bg-[#050505]/85 backdrop-blur-md">
+            <div class="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center mb-6">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor" class="text-[#25D366] drop-shadow-[0_0_15px_rgba(37,211,102,0.6)]" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.405-.883-.733-1.48-1.638-1.653-1.935-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                </svg>
+                <div class="absolute inset-0 overflow-hidden rounded-full border border-white/5 bg-black/20 shadow-inner">
+                    <div class="absolute left-0 w-full h-[3px] bg-[#D4AF37] shadow-[0_0_15px_3px_#D4AF37] animate-laser-scan-vertical"></div>
+                </div>
+            </div>
+            <h2 class="text-xl md:text-3xl font-elegant italic text-[#D4AF37] tracking-wide mb-2 drop-shadow-md">Preparando seu atendimento...</h2>
+            <p class="text-neutral-400 text-xs md:text-sm tracking-widest uppercase">Redirecionando para o WhatsApp seguro</p>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÕES E DADOS
+        const WHATSAPP_NUMBER = "5581992064543"; 
+        const WHATSAPP_BASE_MSG = "Olá! Vim pelo site e quero o orçamento deste produto";
+        const WHATSAPP_GENERIC_MSG = "Olá! Gostaria de falar com vocês.";
+
+        const CATEGORIES = [
+            { id: 'copos', name: 'Copos Térmicos', desc: 'Copos térmicos personalizados com gravação a laser (360ml e 473ml).' },
+            { id: 'garrafas', name: 'Garrafas térmicas', desc: 'Garrafas térmicas personalizadas para presentes, empresas e uso diário.' },
+            { id: '360-graus', name: 'Gravação 360º', desc: 'Produtos exclusivos com gravação a laser em toda a volta (360 graus).' },
+            { id: 'foto-gravacao', name: 'Foto Gravação', desc: 'Gravação a laser de fotografias com altíssima precisão e detalhes.' },
+            { id: 'kit-churrasco', name: 'Kit churrasco', desc: 'Kits personalizados para presente, datas comemorativas e brindes.' },
+            { id: 'porta-joias', name: 'Porta jóias', desc: 'Porta jóias personalizados com acabamento elegante.' },
+            { id: 'tabuas', name: 'Tábuas de madeira', desc: 'Tábuas de madeira personalizadas com gravação a laser.' }
+        ];
+
+        const STORY_IMAGES = [
+            'https://i.imgur.com/s6tjcVa.mp4',
+            'https://i.imgur.com/CPkUXA2.mp4'
+        ];
+
+        const WORK_IMAGES = [
+            'https://i.imgur.com/70WrggZ.jpg',
+            'https://i.imgur.com/SzorQhA.jpg',
+            'https://i.imgur.com/ovnrYLT.jpg',
+            'https://i.imgur.com/XLYQLn3.jpg',
+            'https://i.imgur.com/70WrggZ.jpg',
+            'https://i.imgur.com/SzorQhA.jpg',
+            'https://i.imgur.com/ovnrYLT.jpg',
+            'https://i.imgur.com/XLYQLn3.jpg',
+        ];
+
+        const PRODUCTS_DB = {
+            'copos': [
+                { id: 'c4_1', name: 'Copo Térmico 473ml', img: 'https://i.imgur.com/HV7R6RH.jpg', size: '473ml' },
+                { id: 'c4_2', name: 'Copo Térmico 473ml', img: 'https://i.imgur.com/eSeV7Vh.jpg', size: '473ml' },
+                { id: 'c4_3', name: 'Copo Térmico 473ml', img: 'https://i.imgur.com/j1Ogs8k.jpg', size: '473ml' },
+                { id: 'c4_4', name: 'Copo Térmico 473ml', img: 'https://i.imgur.com/QFUHmsb.jpg', size: '473ml' },
+                { id: 'c4_5', name: 'Copo Térmico 473ml', img: 'https://i.imgur.com/P0PiCGF.jpg', size: '473ml' },
+                { id: 'c4_6', name: 'Copo Térmico 473ml', img: 'https://i.imgur.com/xTjeQlE.jpg', size: '473ml' },
+                { id: 'c4_7', name: 'Copo Térmico 473ml', img: 'https://i.imgur.com/ERv3Yh9.jpg', size: '473ml' },
+                { id: 'c3_1', name: 'Copo Térmico 360ml', img: 'https://i.imgur.com/9855dPS.jpg', size: '360ml' },
+                { id: 'c3_2', name: 'Copo Térmico 360ml', img: 'https://i.imgur.com/3qFSnAv.jpg', size: '360ml' },
+                { id: 'c3_3', name: 'Copo Térmico 360ml', img: 'https://i.imgur.com/EzUgiWo.jpg', size: '360ml' },
+                { id: 'c3_4', name: 'Copo Térmico 360ml', img: 'https://i.imgur.com/xHv8944.jpg', size: '360ml' },
+                { id: 'c3_5', name: 'Copo Térmico 360ml', img: 'https://i.imgur.com/qrvGA3c.jpg', size: '360ml' },
+                { id: 'c3_6', name: 'Copo Térmico 360ml', img: 'https://i.imgur.com/r1F59Rx.jpg', size: '360ml' },
+                { id: 'c3_7', name: 'Copo Térmico 360ml', img: 'https://i.imgur.com/kTwT8L0.jpg', size: '360ml' },
+                { id: 'c3_8', name: 'Copo Térmico 360ml', img: 'https://i.imgur.com/RryTRd2.jpg', size: '360ml' },
+                { id: 'c3_9', name: 'Copo Térmico 360ml', img: 'https://i.imgur.com/j79S59e.jpg', size: '360ml' },
+            ],
+            'garrafas': [
+                { id: 'g400_1', name: 'Garrafa Térmica 400ml', img: 'https://i.imgur.com/LDbUluF.png', size: '400ml' },
+                { id: 'g400_2', name: 'Garrafa Térmica 400ml', img: 'https://i.imgur.com/ffDP92P.png', size: '400ml' },
+                { id: 'g400_3', name: 'Garrafa Térmica 400ml', img: 'https://i.imgur.com/oT9BT3O.png', size: '400ml' },
+                { id: 'g400_4', name: 'Garrafa Térmica 400ml', img: 'https://i.imgur.com/EnXXzv1.png', size: '400ml' },
+                { id: 'g400_5', name: 'Garrafa Térmica 400ml', img: 'https://i.imgur.com/bqtqlZt.png', size: '400ml' },
+                { id: 'g400_6', name: 'Garrafa Térmica 400ml', img: 'https://i.imgur.com/JqZ6HUJ.png', size: '400ml' },
+                { id: 'g400_7', name: 'Garrafa Térmica 400ml', img: 'https://i.imgur.com/AJxNVhz.png', size: '400ml' },
+                { id: 'g400_8', name: 'Garrafa Térmica 400ml', img: 'https://i.imgur.com/jVnOQF2.png', size: '400ml' },
+                { id: 'g600_1', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/psvnNEb.png', size: '600ml' },
+                { id: 'g600_2', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/c9cfzy3.png', size: '600ml' },
+                { id: 'g600_3', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/t2VKOii.png', size: '600ml' },
+                { id: 'g600_4', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/G8wPyek.png', size: '600ml' },
+                { id: 'g600_5', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/qQD6wCa.png', size: '600ml' },
+                { id: 'g600_6', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/fYbnKUQ.png', size: '600ml' },
+                { id: 'g600_7', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/5nnKIlT.png', size: '600ml' },
+                { id: 'g600_8', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/j8JEVFM.png', size: '600ml' },
+                { id: 'g600_9', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/JXsTnli.png', size: '600ml' },
+                { id: 'g600_10', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/je8DkpR.png', size: '600ml' },
+                { id: 'g600_11', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/WZXmdia.png', size: '600ml' },
+                { id: 'g600_12', name: 'Garrafa Térmica 600ml', img: 'https://i.imgur.com/CNrkZes.png', size: '600ml' },
+                { id: 'g750_1', name: 'Garrafa Térmica 750ml', img: 'https://i.imgur.com/VMo5R1R.png', size: '750ml' },
+                { id: 'g750_2', name: 'Garrafa Térmica 750ml', img: 'https://i.imgur.com/K6rENed.png', size: '750ml' },
+            ],
+            '360-graus': [
+                { id: '360_1', name: 'Gravação 360º Exclusiva', img: 'https://i.imgur.com/2Arwzex.mp4', size: 'Arte Completa' },
+                { id: '360_2', name: 'Arte 360º Premium', img: 'https://i.imgur.com/7TCKhuk.mp4', size: 'Arte Completa' },
+                { id: '360_3', name: 'Gravação 360º Especial', img: 'https://i.imgur.com/9A4PZQ7.mp4', size: 'Arte Completa' },
+                { id: '360_4', name: 'Gravação 360º Detalhada', img: 'https://i.imgur.com/VzM0Gyp.mp4', size: 'Arte Completa' }
+            ],
+            'foto-gravacao': [
+                { id: 'fg_1', name: 'Foto Gravação Exclusiva', img: 'https://i.imgur.com/s6tjcVa.mp4' },
+                { id: 'fg_2', name: 'Foto Gravação Premium', img: 'https://i.imgur.com/CPkUXA2.mp4' }
+            ],
+            'kit-churrasco': [
+                { id: 'kn_1', name: 'Kit Churrasco Premium', img: 'https://i.imgur.com/4kON5cD.jpeg' },
+                { id: 'kn_2', name: 'Kit Churrasco Exclusivo', img: 'https://i.imgur.com/55COugr.jpeg' },
+                { id: 'kn_3', name: 'Kit Churrasco Especial', img: 'https://i.imgur.com/jYZNwaA.jpeg' },
+            ],
+            'porta-joias': [
+                { id: 'p1', name: 'Porta Jóias Clássico', img: 'https://i.imgur.com/iFJCFe8.jpeg' },
+                { id: 'p2', name: 'Estojo Aveludado', img: 'https://i.imgur.com/O284ISc.jpeg' },
+            ],
+            'tabuas': [
+                { id: 't1', name: 'Tábua Rústica Premium', img: 'https://i.imgur.com/B08JnuQ.jpeg' },
+                { id: 't2', name: 'Tábua Rústica Exclusiva', img: 'https://i.imgur.com/OIfx7tp.jpeg' },
+                { id: 't3', name: 'Tábua Rústica Especial', img: 'https://i.imgur.com/8zTG01o.jpeg' },
+            ]
+        };
+
+        // ESTADO GLOBAL
+        let currentView = 'home';
+        let selectedCategory = null;
+        let isDarkMode = true;
+        let activeStoryIndex = 0;
+        let storyTimer = null;
+        const STORY_DURATION = 4000;
+
+        // INICIALIZAÇÃO
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSidebar();
+            renderView();
+            lucide.createIcons();
+        });
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (isDarkMode) {
+                html.classList.add('dark');
+                themeIcon.setAttribute('data-lucide', 'sun');
+                themeText.textContent = 'Escuro';
+            } else {
+                html.classList.remove('dark');
+                themeIcon.setAttribute('data-lucide', 'moon');
+                themeText.textContent = 'Claro';
+            }
+            lucide.createIcons();
+            renderSidebar(); // Update active states based on theme
+        }
+
+        function navigateToHome() {
+            currentView = 'home';
+            selectedCategory = null;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderSidebar();
+            renderView();
+        }
+
+        function navigateToCategory(catId) {
+            currentView = 'category';
+            selectedCategory = CATEGORIES.find(c => c.id === catId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderSidebar();
+            renderView();
+        }
+
+        function renderSidebar() {
+            const container = document.getElementById('nav-container');
+            
+            const btnInactiveText = isDarkMode ? 'text-neutral-400' : 'text-slate-600';
+            const btnInactiveBg = isDarkMode ? 'hover:bg-[#1a1a1a]' : 'hover:bg-slate-100';
+
+            let html = `
+                <button onclick="navigateToHome()" class="w-full text-center md:text-left px-1 md:px-4 py-2.5 md:py-3.5 rounded-lg md:rounded-xl text-[10px] md:text-sm font-bold transition-all duration-200 flex flex-col md:flex-row items-center gap-1 md:gap-3 leading-tight
+                    ${currentView === 'home' 
+                        ? 'bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 laser-effect-container' 
+                        : `border border-transparent ${btnInactiveText} ${btnInactiveBg}`}">
+                    ${currentView === 'home' ? '<div class="laser-effect-line"></div>' : ''}
+                    <div class="shrink-0 w-1.5 h-1.5 rounded-full hidden md:block ${currentView === 'home' ? 'bg-[#D4AF37]' : 'bg-transparent'}"></div>
+                    <span class="relative z-20">Início</span>
+                </button>
+                <div class="h-2 md:h-4"></div>
+            `;
+
+            CATEGORIES.forEach(cat => {
+                const isActive = selectedCategory && selectedCategory.id === cat.id;
+                html += `
+                    <button onclick="navigateToCategory('${cat.id}')" class="w-full text-center md:text-left px-1 md:px-4 py-2.5 md:py-3.5 rounded-lg md:rounded-xl text-[10px] md:text-sm font-medium transition-all duration-200 flex flex-col md:flex-row items-center gap-1 md:gap-3 leading-tight
+                        ${isActive 
+                            ? 'bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 laser-effect-container' 
+                            : `border border-transparent ${btnInactiveText} ${btnInactiveBg}`}">
+                        ${isActive ? '<div class="laser-effect-line"></div>' : ''}
+                        <div class="shrink-0 w-1.5 h-1.5 rounded-full hidden md:block ${isActive ? 'bg-[#D4AF37]' : 'bg-transparent'}"></div>
+                        <span class="relative z-20 line-clamp-2">${cat.name}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderView() {
+            const container = document.getElementById('content-container');
+            
+            if (currentView === 'home') {
+                container.innerHTML = getHomeHTML();
+                startStoryTimer();
+            } else {
+                stopStoryTimer();
+                container.innerHTML = getCategoryHTML();
+            }
+            lucide.createIcons();
+        }
+
+        function getHomeHTML() {
+            let storyBars = STORY_IMAGES.map((_, idx) => `
+                <div class="h-1 flex-1 bg-white/30 rounded-full overflow-hidden backdrop-blur-sm shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
+                    <div id="story-bar-${idx}" class="h-full bg-white rounded-full ${idx < activeStoryIndex ? 'w-full' : idx > activeStoryIndex ? 'w-0' : 'animate-story-progress'}"></div>
+                </div>
+            `).join('');
+
+            let storyMedia = STORY_IMAGES.map((media, idx) => {
+                const isActiveClass = idx === activeStoryIndex ? 'opacity-100 z-10 scale-100 group-hover:scale-[1.02]' : 'opacity-0 z-0 scale-105 pointer-events-none';
+                if (media.endsWith('.mp4')) {
+                    return `<video id="story-media-${idx}" src="${media}" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-all duration-700 ${isActiveClass}"></video>`;
+                } else {
+                    return `<img id="story-media-${idx}" src="${media}" class="absolute inset-0 w-full h-full object-cover transition-all duration-700 ${isActiveClass}" />`;
+                }
+            }).join('');
+
+            let workImagesHTML = WORK_IMAGES.map(img => `
+                <div class="w-[120px] md:w-[200px] shrink-0 px-1.5 md:px-2 cursor-pointer transition-transform hover:scale-105" onclick="setFullscreenImage('${img}')">
+                    <div class="aspect-[3/4] rounded-lg md:rounded-xl overflow-hidden border border-[#222]">
+                        <img src="${img}" alt="Trabalho" class="w-full h-full object-cover" />
+                    </div>
+                </div>
+            `).join('');
+
+            return `
+                <div class="animate-in fade-in duration-500 flex flex-col items-center justify-center gap-6 md:gap-12 pt-2 md:pt-4">
+                    <div class="w-full text-center space-y-2 md:space-y-4 max-w-2xl mx-auto">
+                        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-elegant italic font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-slate-400 via-[#F3E5AB] to-[#D4AF37] dark:from-white pb-2 drop-shadow-sm">
+                            Destaques
+                        </h1>
+                        <p class="text-lg md:text-2xl font-medium text-[#D4AF37] flex items-center justify-center gap-2 animate-pulse">
+                            Dia dos namorados chegando <span class="text-red-500">❤️</span>
+                        </p>
+                    </div>
+
+                    <div class="shrink-0 flex justify-center py-2 w-full">
+                        <button onclick="handleRedirectWhatsApp(event, 'Destaques')" class="relative block w-[230px] sm:w-[320px] md:w-[400px] aspect-[9/16] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-2xl bg-[#0a0a0a] group cursor-pointer border-none p-0 text-left">
+                            <div class="absolute inset-y-0 left-0 w-12 md:w-16 z-30 flex items-center justify-center" onclick="handlePrevStory(event)">
+                                <div class="bg-black/50 p-1 md:p-2 rounded-full text-white backdrop-blur-sm ml-1 md:ml-2 hover:bg-[#D4AF37] transition-colors"><i data-lucide="chevron-left" class="md:w-6 md:h-6"></i></div>
+                            </div>
+                            <div class="absolute inset-y-0 right-0 w-12 md:w-16 z-30 flex items-center justify-center" onclick="handleNextStory(event)">
+                                <div class="bg-black/50 p-1 md:p-2 rounded-full text-white backdrop-blur-sm mr-1 md:mr-2 hover:bg-[#D4AF37] transition-colors"><i data-lucide="chevron-right" class="md:w-6 md:h-6"></i></div>
+                            </div>
+
+                            <div class="absolute top-3 md:top-4 left-0 w-full px-3 md:px-4 flex gap-1 z-20">
+                                ${storyBars}
+                            </div>
+                            
+                            ${storyMedia}
+                            
+                            <div class="absolute top-0 left-0 w-full h-16 md:h-20 bg-gradient-to-b from-black/60 to-transparent z-10 pointer-events-none"></div>
+                        </button>
+                    </div>
+
+                    <div class="w-full mt-6 md:mt-12 overflow-hidden">
+                        <h2 class="text-2xl md:text-4xl font-elegant italic tracking-wide mb-4 md:mb-6 text-center text-[#D4AF37]">
+                            Nossos Trabalhos
+                        </h2>
+                        <div class="relative w-full bg-white dark:bg-[#111] py-3 md:py-4 rounded-xl md:rounded-2xl flex border border-slate-200 dark:border-none shadow-sm dark:shadow-none">
+                            <div class="absolute inset-y-0 left-0 w-8 md:w-20 bg-gradient-to-r from-white dark:from-[#111] to-transparent z-10 pointer-events-none"></div>
+                            <div class="absolute inset-y-0 right-0 w-8 md:w-20 bg-gradient-to-l from-white dark:from-[#111] to-transparent z-10 pointer-events-none"></div>
+                            
+                            <div class="flex w-[200%] animate-scroll">
+                                ${workImagesHTML}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getCategoryHTML() {
+            const products = PRODUCTS_DB[selectedCategory.id] || [];
+            
+            let productsHTML = products.map(product => {
+                const mediaHTML = product.img.endsWith('.mp4') 
+                    ? `<video src="${product.img}" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"></video>`
+                    : `<img src="${product.img}" alt="${product.name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100" />`;
+                
+                return `
+                    <button onclick="openProductModal('${product.id}')" class="relative w-full aspect-[9/16] rounded-xl md:rounded-2xl overflow-hidden group border border-slate-200 dark:border-[#262626] hover:border-[#D4AF37] dark:hover:border-[#D4AF37] transition-all focus:outline-none focus:ring-2 focus:ring-[#D4AF37] text-left shadow-sm bg-slate-100 dark:bg-[#0a0a0a]">
+                        ${mediaHTML}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-2 md:p-4">
+                            <div class="w-full">
+                                <div class="w-5 h-5 md:w-6 md:h-6 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center mb-1.5 md:mb-2 border border-white/20">
+                                    <i data-lucide="sparkles" class="w-2.5 h-2.5 md:w-3 md:h-3 text-[#D4AF37]"></i>
+                                </div>
+                                <h3 class="text-white text-[10px] sm:text-xs md:text-sm font-medium line-clamp-2 leading-tight drop-shadow-md">
+                                    ${product.name}
+                                </h3>
+                                ${product.size ? `<span class="text-[#D4AF37] text-[9px] md:text-[10px] font-bold uppercase mt-0.5 md:mt-1 block">${product.size}</span>` : ''}
+                            </div>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+
+            if (products.length === 0) {
+                productsHTML = `
+                    <div class="col-span-full text-center py-12 md:py-16 bg-white dark:bg-[#171717] rounded-xl md:rounded-2xl border border-slate-200 dark:border-[#262626]">
+                        <p class="text-slate-500 dark:text-neutral-400 text-xs md:text-lg">Novos produtos em breve!</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div class="mb-6 md:mb-8 text-center sm:text-left">
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl font-elegant italic font-bold mb-1 md:mb-3 text-[#D4AF37] tracking-wide">${selectedCategory.name}</h1>
+                        <p class="text-slate-500 dark:text-neutral-400 text-xs sm:text-sm md:text-lg">${selectedCategory.desc || 'Selecione um produto para expandir'}</p>
+                    </div>
+                    <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5">
+                        ${productsHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        function startStoryTimer() {
+            stopStoryTimer();
+            storyTimer = setInterval(() => {
+                activeStoryIndex = (activeStoryIndex + 1) % STORY_IMAGES.length;
+                updateStoryDOM();
+            }, STORY_DURATION);
+        }
+
+        function stopStoryTimer() {
+            if (storyTimer) clearInterval(storyTimer);
+        }
+
+        function handleNextStory(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            activeStoryIndex = (activeStoryIndex + 1) % STORY_IMAGES.length;
+            updateStoryDOM();
+            startStoryTimer();
+        }
+
+        function handlePrevStory(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            activeStoryIndex = (activeStoryIndex - 1 + STORY_IMAGES.length) % STORY_IMAGES.length;
+            updateStoryDOM();
+            startStoryTimer();
+        }
+
+        function updateStoryDOM() {
+            // Update Progress bars
+            for (let i = 0; i < STORY_IMAGES.length; i++) {
+                const bar = document.getElementById(`story-bar-${i}`);
+                if (!bar) continue;
+                bar.className = `h-full bg-white rounded-full ${i < activeStoryIndex ? 'w-full' : i > activeStoryIndex ? 'w-0' : 'animate-story-progress'}`;
+                
+                // Restart animation trick
+                if (i === activeStoryIndex) {
+                    bar.classList.remove('animate-story-progress');
+                    void bar.offsetWidth; 
+                    bar.classList.add('animate-story-progress');
+                }
+            }
+
+            // Update Media visibility
+            for (let i = 0; i < STORY_IMAGES.length; i++) {
+                const media = document.getElementById(`story-media-${i}`);
+                if (!media) continue;
+                if (i === activeStoryIndex) {
+                    media.className = `absolute inset-0 w-full h-full object-cover transition-all duration-700 opacity-100 z-10 scale-100 group-hover:scale-[1.02]`;
+                } else {
+                    media.className = `absolute inset-0 w-full h-full object-cover transition-all duration-700 opacity-0 z-0 scale-105 pointer-events-none`;
+                }
+            }
+        }
+
+        function getProductById(id) {
+            for (const cat in PRODUCTS_DB) {
+                const product = PRODUCTS_DB[cat].find(p => p.id === id);
+                if (product) return product;
+            }
+            return null;
+        }
+
+        function openProductModal(id) {
+            const product = getProductById(id);
+            if (!product) return;
+
+            const modal = document.getElementById('product-modal');
+            const mediaHTML = product.img.endsWith('.mp4')
+                ? `<video src="${product.img}" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"></video>`
+                : `<img src="${product.img}" alt="${product.name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />`;
+
+            modal.innerHTML = `
+                <div class="relative w-full max-w-[280px] sm:max-w-sm flex flex-col max-h-[90vh] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-2xl bg-white dark:bg-[#171717] border border-slate-200 dark:border-[#262626]">
+                    <button onclick="closeProductModal()" class="absolute top-3 right-3 md:top-4 md:right-4 z-10 w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/80 backdrop-blur-md transition-colors">
+                        <i data-lucide="x" class="w-4 h-4 md:w-[18px] md:h-[18px]"></i>
+                    </button>
+                    <div class="relative w-full h-[240px] md:h-80 shrink-0 cursor-pointer group bg-slate-100 dark:bg-[#0a0a0a]" onclick="setFullscreenImage('${product.img}')">
+                        ${mediaHTML}
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/30 transition-opacity">
+                            <span class="bg-black/60 text-white text-[10px] md:text-xs px-2 py-1 md:px-3 md:py-1.5 rounded-full backdrop-blur-sm">Tocar para ampliar</span>
+                        </div>
+                        <div class="absolute top-3 left-3 md:top-4 md:left-4 bg-black/60 backdrop-blur-md px-2 py-1 md:px-3 md:py-1.5 rounded-full border border-white/10 text-[9px] md:text-[10px] font-medium text-[#D4AF37] flex items-center gap-1.5">
+                            <i data-lucide="sparkles" class="w-2.5 h-2.5 md:w-3 md:h-3"></i> Personalizável
+                        </div>
+                    </div>
+                    <div class="p-4 md:p-5 flex flex-col flex-1 overflow-y-auto no-scrollbar">
+                        <h3 class="text-base md:text-xl font-bold mb-3 md:mb-4 text-slate-900 dark:text-white leading-tight">${product.name}</h3>
+                        ${product.size ? `
+                            <div class="space-y-2 md:space-y-3 mb-4 md:mb-6 bg-slate-50 dark:bg-[#0a0a0a] p-3 md:p-4 rounded-xl md:rounded-2xl border border-slate-200 dark:border-[#262626]">
+                                <div class="flex justify-between items-center text-xs md:text-sm">
+                                    <span class="text-slate-400 dark:text-neutral-500">Capacidade:</span> 
+                                    <span class="text-slate-700 dark:text-neutral-200 font-medium">${product.size}</span>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="mt-auto pt-2">
+                            <button onclick="handleRedirectWhatsApp(event, '${product.name}')" class="inline-flex items-center justify-center gap-2 px-4 py-3 md:px-6 md:py-3 rounded-full font-medium transition-all duration-300 w-full text-xs md:text-sm cursor-pointer bg-[#25D366] text-white hover:bg-[#20bd5a] border-none btn-whatsapp-pulse">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="md:w-5 md:h-5" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.405-.883-.733-1.48-1.638-1.653-1.935-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                                </svg>
+                                Pedir orçamento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('product-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function setFullscreenImage(src) {
+            const modal = document.getElementById('fullscreen-modal');
+            const content = document.getElementById('fullscreen-content');
+            
+            if (src) {
+                closeProductModal(); // Close product modal if open
+                if (src.endsWith('.mp4')) {
+                    content.innerHTML = `<video src="${src}" controls autoplay loop playsinline class="max-w-full max-h-full object-contain pointer-events-auto"></video>`;
+                } else {
+                    content.innerHTML = `<img src="${src}" alt="Ampliada" class="max-w-full max-h-full object-contain pointer-events-auto" />`;
+                }
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                content.innerHTML = '';
+            }
+            lucide.createIcons();
+        }
+
+        function closeModals(e) {
+            if (e.target.id === 'product-modal') closeProductModal();
+            if (e.target.id === 'fullscreen-modal') setFullscreenImage(null);
+        }
+
+        function handleRedirectWhatsApp(e, productName = "") {
+            if (e && e.preventDefault) e.preventDefault();
+            
+            const overlay = document.getElementById('redirecting-modal');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+
+            const text = productName ? `${WHATSAPP_BASE_MSG}: ${productName}` : WHATSAPP_BASE_MSG;
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+                
+                const newWindow = window.open(url, '_blank');
+                if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                    window.location.href = url;
+                }
+            }, 1800);
+        }
+    </script>
+</body>
+</html>
