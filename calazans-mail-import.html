@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101828" />
+  <title>Calazans Mail</title>
+    <style>
+:root {
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --panel-2: #f8fafc;
+  --text: #101828;
+  --muted: #667085;
+  --border: #e4e7ec;
+  --brand: #111827;
+  --brand-2: #344054;
+  --accent: #2563eb;
+  --danger: #d92d20;
+  --success: #039855;
+  --warning: #b54708;
+  --shadow: 0 16px 40px rgba(16, 24, 40, .08);
+}
+
+[data-theme="dark"] {
+  --bg: #0b0f17;
+  --panel: #111827;
+  --panel-2: #161f2f;
+  --text: #f8fafc;
+  --muted: #98a2b3;
+  --border: #273244;
+  --brand: #ffffff;
+  --brand-2: #d0d5dd;
+  --accent: #60a5fa;
+  --danger: #f97066;
+  --success: #32d583;
+  --warning: #fdb022;
+  --shadow: 0 18px 50px rgba(0, 0, 0, .35);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(37,99,235,.12), transparent 30%),
+    radial-gradient(circle at 90% 90%, rgba(17,24,39,.10), transparent 30%),
+    var(--bg);
+}
+.auth-card {
+  width: min(460px, 100%);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+.logo-lockup { display: flex; align-items: center; gap: 13px; margin-bottom: 28px; }
+.logo-mark {
+  width: 46px; height: 46px; border-radius: 14px;
+  background: var(--brand); color: var(--panel);
+  display: grid; place-items: center; font-weight: 900; font-size: 22px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+.logo-text strong { display: block; font-size: 20px; letter-spacing: -.02em; }
+.logo-text span { color: var(--muted); font-size: 13px; }
+.auth-card h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: -.03em; }
+.auth-card p { margin: 0 0 24px; color: var(--muted); line-height: 1.55; }
+.field { display: grid; gap: 8px; margin-bottom: 16px; }
+.field label { font-size: 13px; font-weight: 700; }
+.field input, .field textarea {
+  width: 100%; border: 1px solid var(--border); background: var(--panel-2); color: var(--text);
+  border-radius: 12px; padding: 13px 14px; outline: none;
+}
+.field input:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+.primary-btn, .secondary-btn, .ghost-btn, .icon-btn {
+  border: 0; border-radius: 12px; transition: .16s ease;
+}
+.primary-btn { width: 100%; padding: 13px 16px; background: var(--brand); color: var(--panel); font-weight: 800; }
+.primary-btn:hover { transform: translateY(-1px); opacity: .94; }
+.secondary-btn { padding: 11px 14px; background: var(--panel-2); color: var(--text); border: 1px solid var(--border); font-weight: 700; }
+.ghost-btn { padding: 9px 11px; background: transparent; color: var(--muted); }
+.icon-btn { width: 40px; height: 40px; background: transparent; color: var(--muted); display: grid; place-items: center; }
+.auth-note { margin-top: 18px; padding: 12px 14px; border-radius: 12px; background: var(--panel-2); color: var(--muted); font-size: 12px; line-height: 1.45; }
+.error { color: var(--danger); font-size: 13px; margin-top: 10px; }
+
+.mail-shell { min-height: 100vh; display: grid; grid-template-columns: 252px 1fr; }
+.sidebar {
+  position: sticky; top: 0; height: 100vh; background: var(--panel); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; padding: 18px 14px;
+}
+.sidebar .logo-lockup { margin-bottom: 18px; padding: 0 8px; }
+.compose-btn {
+  width: 100%; padding: 13px 16px; margin-bottom: 14px; border: 0; border-radius: 14px;
+  background: var(--brand); color: var(--panel); font-weight: 800; display: flex; justify-content: center; gap: 8px;
+}
+.nav { display: grid; gap: 4px; }
+.nav button {
+  width: 100%; display: flex; align-items: center; gap: 12px; border: 0; background: transparent;
+  color: var(--muted); border-radius: 10px; padding: 10px 12px; text-align: left; font-weight: 650;
+}
+.nav button:hover, .nav button.active { background: var(--panel-2); color: var(--text); }
+.nav button.active { font-weight: 800; }
+.nav .count { margin-left: auto; font-size: 12px; color: var(--muted); }
+.sidebar-footer { margin-top: auto; display: grid; gap: 8px; border-top: 1px solid var(--border); padding-top: 14px; }
+.sidebar-footer button { width: 100%; text-align: left; }
+
+.main { min-width: 0; }
+.topbar {
+  position: sticky; top: 0; z-index: 10; height: 72px; background: rgba(255,255,255,.88); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; padding: 0 22px;
+}
+[data-theme="dark"] .topbar { background: rgba(17,24,39,.88); }
+.mobile-menu { display: none; }
+.search-wrap { flex: 1; max-width: 760px; position: relative; }
+.search-wrap input {
+  width: 100%; border: 1px solid var(--border); background: var(--panel); color: var(--text);
+  border-radius: 14px; padding: 12px 16px 12px 42px; outline: none;
+}
+.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+.profile-chip { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--brand); color: var(--panel); display: grid; place-items: center; font-weight: 900; }
+.profile-text { min-width: 0; }
+.profile-text strong, .profile-text span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.profile-text strong { font-size: 13px; }
+.profile-text span { font-size: 11px; color: var(--muted); }
+
+.content { padding: 24px; }
+.page-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+.page-head h2 { margin: 0 0 5px; font-size: 28px; letter-spacing: -.03em; }
+.page-head p { margin: 0; color: var(--muted); font-size: 14px; }
+.status-pill { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--border); background: var(--panel); border-radius: 999px; padding: 8px 11px; color: var(--muted); font-size: 12px; font-weight: 700; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--warning); }
+
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 1px 2px rgba(16,24,40,.02); }
+.empty-state { min-height: 440px; display: grid; place-items: center; text-align: center; padding: 44px; }
+.empty-state .empty-icon { width: 74px; height: 74px; border-radius: 22px; display: grid; place-items: center; background: var(--panel-2); font-size: 30px; margin: 0 auto 18px; }
+.empty-state h3 { margin: 0 0 8px; font-size: 20px; }
+.empty-state p { max-width: 520px; color: var(--muted); line-height: 1.6; margin: 0 auto 18px; }
+.empty-state .actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+.message-list { overflow: hidden; }
+.message-row { display: grid; grid-template-columns: 34px minmax(130px, 190px) 1fr auto; gap: 10px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.message-row:last-child { border-bottom: 0; }
+.message-row:hover { background: var(--panel-2); }
+.message-row .sender { font-weight: 800; }
+.message-row .subject { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.message-row .subject span { color: var(--muted); font-weight: 400; }
+.message-row time { color: var(--muted); font-size: 12px; }
+
+.settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+.settings-card { padding: 20px; }
+.settings-card h3 { margin: 0 0 6px; }
+.settings-card p { margin: 0 0 16px; color: var(--muted); line-height: 1.5; font-size: 14px; }
+.setting-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); }
+.setting-line:first-of-type { border-top: 0; }
+.state { font-size: 12px; font-weight: 800; padding: 6px 8px; border-radius: 999px; }
+.state.off { background: rgba(181,71,8,.10); color: var(--warning); }
+.state.on { background: rgba(3,152,85,.10); color: var(--success); }
+
+.composer-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,.26); z-index: 50; display: grid; place-items: end; padding: 22px; }
+.composer { width: min(680px, 100%); background: var(--panel); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+.composer-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--border); font-weight: 800; }
+.composer-body { padding: 14px; display: grid; gap: 10px; }
+.composer-body input, .composer-body textarea { width: 100%; border: 0; border-bottom: 1px solid var(--border); background: transparent; color: var(--text); padding: 10px 4px; outline: none; }
+.composer-body textarea { min-height: 220px; resize: vertical; border-bottom: 0; }
+.composer-foot { padding: 12px 14px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+.composer-foot .primary-btn { width: auto; }
+.block-note { color: var(--warning); font-size: 12px; line-height: 1.4; }
+
+.toast { position: fixed; right: 20px; bottom: 20px; background: var(--text); color: var(--panel); padding: 12px 16px; border-radius: 12px; z-index: 100; box-shadow: var(--shadow); font-size: 13px; }
+
+@media (max-width: 900px) {
+  .mail-shell { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; left: -280px; width: 260px; z-index: 30; transition: .2s ease; box-shadow: var(--shadow); }
+  .sidebar.open { left: 0; }
+  .mobile-menu { display: grid; }
+  .profile-text { display: none; }
+  .content { padding: 18px; }
+  .settings-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .auth-card { padding: 24px 20px; border-radius: 20px; }
+  .topbar { height: 64px; padding: 0 12px; }
+  .content { padding: 14px 12px 24px; }
+  .page-head { align-items: flex-start; flex-direction: column; }
+  .page-head h2 { font-size: 24px; }
+  .status-pill { align-self: flex-start; }
+  .empty-state { min-height: 360px; padding: 28px 18px; }
+  .composer-backdrop { padding: 0; }
+  .composer { border-radius: 18px 18px 0 0; }
+}
+
+</style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+const app = document.getElementById('app');
+const STORE = 'calazansMail.v1';
+const SESSION = 'calazansMail.session';
+
+const icons = {
+  inbox: '📥', star: '⭐', sent: '📤', draft: '📝', spam: '🛡️', trash: '🗑️', settings: '⚙️'
+};
+
+function loadState() {
+  const raw = localStorage.getItem(STORE);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch { return null; }
+}
+function saveState(state) { localStorage.setItem(STORE, JSON.stringify(state)); }
+function isLoggedIn() { return sessionStorage.getItem(SESSION) === '1'; }
+function setLoggedIn(v) { v ? sessionStorage.setItem(SESSION, '1') : sessionStorage.removeItem(SESSION); }
+function bytesToB64(bytes) { return btoa(String.fromCharCode(...new Uint8Array(bytes))); }
+function b64ToBytes(str) { return Uint8Array.from(atob(str), c => c.charCodeAt(0)); }
+
+async function derivePassword(password, saltB64) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+  const salt = saltB64 ? b64ToBytes(saltB64) : crypto.getRandomValues(new Uint8Array(16));
+  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt, iterations: 210000, hash: 'SHA-256' }, key, 256);
+  return { hash: bytesToB64(bits), salt: bytesToB64(salt) };
+}
+
+function escapeHtml(str='') {
+  return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+}
+function initials(name='Douglas') { return name.trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase() || 'DC'; }
+function toast(msg) {
+  const el = document.createElement('div'); el.className = 'toast'; el.textContent = msg; document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2600);
+}
+
+function applyTheme() {
+  const state = loadState();
+  const theme = state?.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.theme = theme;
+}
+applyTheme();
+
+function renderSetup() {
+  app.innerHTML = `
+    <main class="auth-shell">
+      <section class="auth-card">
+        <div class="logo-lockup"><div class="logo-mark">C</div><div class="logo-text"><strong>Calazans Mail</strong><span>sua caixa pessoal</span></div></div>
+        <h1>Criar acesso</h1>
+        <p>Esta é a configuração inicial do seu painel. O domínio e o recebimento real de e-mails serão conectados depois.</p>
+        <form id="setupForm">
+          <div class="field"><label>Seu nome</label><input id="name" value="Douglas Calazans" autocomplete="name" required /></div>
+          <div class="field"><label>Crie uma senha</label><input id="pass" type="password" minlength="8" autocomplete="new-password" required /></div>
+          <div class="field"><label>Confirme a senha</label><input id="confirm" type="password" minlength="8" autocomplete="new-password" required /></div>
+          <button class="primary-btn" type="submit">Criar meu acesso</button>
+          <div id="setupError" class="error"></div>
+        </form>
+        <div class="auth-note">Modo inicial local: a senha é protegida por derivação criptográfica no navegador. Não use esta versão para e-mails reais até o domínio e o backend seguro serem conectados.</div>
+      </section>
+    </main>`;
+  document.getElementById('setupForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const pass = document.getElementById('pass').value;
+    const confirm = document.getElementById('confirm').value;
+    const err = document.getElementById('setupError');
+    if (pass !== confirm) { err.textContent = 'As senhas não coincidem.'; return; }
+    if (pass.length < 8) { err.textContent = 'Use pelo menos 8 caracteres.'; return; }
+    const derived = await derivePassword(pass);
+    saveState({
+      owner: name || 'Douglas Calazans',
+      passwordHash: derived.hash,
+      salt: derived.salt,
+      theme: 'light',
+      folder: 'inbox',
+      drafts: [],
+      messages: [],
+      createdAt: new Date().toISOString()
+    });
+    setLoggedIn(true);
+    renderMailbox();
+  });
+}
+
+function renderLogin() {
+  const state = loadState();
+  app.innerHTML = `
+    <main class="auth-shell">
+      <section class="auth-card">
+        <div class="logo-lockup"><div class="logo-mark">C</div><div class="logo-text"><strong>Calazans Mail</strong><span>sua caixa pessoal</span></div></div>
+        <h1>Bem-vindo</h1>
+        <p>Entre para acessar sua caixa pessoal.</p>
+        <form id="loginForm">
+          <div class="field"><label>Senha</label><input id="loginPass" type="password" autocomplete="current-password" required autofocus /></div>
+          <button class="primary-btn" type="submit">Entrar</button>
+          <div id="loginError" class="error"></div>
+        </form>
+        <div class="auth-note">Conta local: ${escapeHtml(state.owner)}. O endereço de e-mail será definido quando o domínio Calazans for conectado.</div>
+      </section>
+    </main>`;
+  document.getElementById('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const pass = document.getElementById('loginPass').value;
+    const check = await derivePassword(pass, state.salt);
+    if (check.hash !== state.passwordHash) { document.getElementById('loginError').textContent = 'Senha incorreta.'; return; }
+    setLoggedIn(true); renderMailbox();
+  });
+}
+
+const folderLabels = {
+  inbox: ['Entrada', '📥'],
+  starred: ['Favoritos', '⭐'],
+  sent: ['Enviados', '📤'],
+  drafts: ['Rascunhos', '📝'],
+  spam: ['Spam', '🛡️'],
+  trash: ['Lixeira', '🗑️'],
+  settings: ['Configurações', '⚙️']
+};
+
+function renderMailbox() {
+  const state = loadState();
+  if (!state) return renderSetup();
+  if (!isLoggedIn()) return renderLogin();
+  const folder = state.folder || 'inbox';
+  app.innerHTML = `
+  <div class="mail-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="logo-lockup"><div class="logo-mark">C</div><div class="logo-text"><strong>Calazans Mail</strong><span>pessoal</span></div></div>
+      <button class="compose-btn" id="composeBtn">＋ Escrever</button>
+      <nav class="nav">
+        ${['inbox','starred','sent','drafts','spam','trash'].map(key => `
+          <button data-folder="${key}" class="${folder===key?'active':''}"><span>${folderLabels[key][1]}</span><span>${folderLabels[key][0]}</span>${key==='drafts' && state.drafts.length ? `<span class="count">${state.drafts.length}</span>` : ''}</button>`).join('')}
+      </nav>
+      <div class="sidebar-footer">
+        <button class="ghost-btn ${folder==='settings'?'active':''}" data-folder="settings">⚙️ Configurações</button>
+        <button class="ghost-btn" id="logoutBtn">🔒 Bloquear</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn mobile-menu" id="menuBtn" aria-label="Abrir menu">☰</button>
+        <div class="search-wrap"><span class="search-icon">⌕</span><input id="search" placeholder="Pesquisar mensagens" /></div>
+        <button class="icon-btn" id="themeBtn" aria-label="Alternar tema">◐</button>
+        <div class="profile-chip"><div class="avatar">${initials(state.owner)}</div><div class="profile-text"><strong>${escapeHtml(state.owner)}</strong><span>@calazans · aguardando domínio</span></div></div>
+      </header>
+      <section class="content" id="content"></section>
+    </main>
+  </div>`;
+
+  document.querySelectorAll('[data-folder]').forEach(btn => btn.addEventListener('click', () => {
+    const s = loadState(); s.folder = btn.dataset.folder; saveState(s); renderMailbox();
+  }));
+  document.getElementById('logoutBtn').onclick = () => { setLoggedIn(false); renderLogin(); };
+  document.getElementById('themeBtn').onclick = () => {
+    const s = loadState(); s.theme = (document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); saveState(s); applyTheme();
+  };
+  document.getElementById('menuBtn').onclick = () => document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('composeBtn').onclick = renderComposer;
+  document.getElementById('search').addEventListener('input', e => renderFolder(e.target.value));
+  renderFolder('');
+}
+
+function renderFolder(query='') {
+  const state = loadState();
+  const folder = state.folder || 'inbox';
+  const content = document.getElementById('content');
+  if (folder === 'settings') { renderSettings(); return; }
+  const [label] = folderLabels[folder];
+  const items = folder === 'drafts' ? state.drafts : state.messages.filter(m => m.folder === folder);
+  const filtered = items.filter(m => `${m.to||''} ${m.from||''} ${m.subject||''} ${m.body||''}`.toLowerCase().includes(query.toLowerCase()));
+  content.innerHTML = `
+    <div class="page-head">
+      <div><h2>${label}</h2><p>${folder === 'inbox' ? 'Suas mensagens recebidas aparecerão aqui.' : 'Organize suas mensagens pessoais.'}</p></div>
+      <div class="status-pill"><span class="dot"></span> Domínio não conectado</div>
+    </div>
+    <div class="panel">
+      ${filtered.length ? `<div class="message-list">${filtered.map(m => `
+        <div class="message-row">
+          <span>○</span><div class="sender">${escapeHtml(m.from || m.to || 'Rascunho')}</div>
+          <div class="subject"><strong>${escapeHtml(m.subject || '(sem assunto)')}</strong> <span>— ${escapeHtml((m.body||'').slice(0,100))}</span></div>
+          <time>${new Date(m.createdAt).toLocaleDateString('pt-BR')}</time>
+        </div>`).join('')}</div>` : emptyState(folder)}
+    </div>`;
+}
+
+function emptyState(folder) {
+  const data = {
+    inbox: ['📭','Sua caixa está vazia','Quando o domínio for conectado, e-mails de Instagram, Facebook, TikTok e outras contas poderão chegar aqui.'],
+    starred: ['⭐','Nenhum favorito','Marque mensagens importantes para encontrá-las rapidamente.'],
+    sent: ['📤','Nenhum e-mail enviado','O envio real será liberado depois que seu domínio e o serviço de e-mail forem conectados.'],
+    drafts: ['📝','Nenhum rascunho','Você pode começar uma mensagem e salvá-la como rascunho mesmo antes do domínio.'],
+    spam: ['🛡️','Nada no spam','Mensagens suspeitas aparecerão aqui quando o recebimento estiver ativo.'],
+    trash: ['🗑️','Lixeira vazia','Mensagens removidas aparecerão aqui.']
+  }[folder];
+  return `<div class="empty-state"><div><div class="empty-icon">${data[0]}</div><h3>${data[1]}</h3><p>${data[2]}</p>${folder==='inbox'?`<div class="actions"><button class="secondary-btn" onclick="openSettings()">Ver configuração</button></div>`:''}</div></div>`;
+}
+window.openSettings = function(){ const s=loadState(); s.folder='settings'; saveState(s); renderMailbox(); };
+
+function renderComposer() {
+  const wrap = document.createElement('div'); wrap.className = 'composer-backdrop';
+  wrap.innerHTML = `<div class="composer">
+    <div class="composer-head"><span>Nova mensagem</span><button class="icon-btn" id="closeComposer">✕</button></div>
+    <div class="composer-body">
+      <input id="to" placeholder="Para" />
+      <input id="subject" placeholder="Assunto" />
+      <textarea id="body" placeholder="Escreva sua mensagem..."></textarea>
+    </div>
+    <div class="composer-foot"><div class="block-note">Envio real desligado até conectar um domínio.</div><div><button class="secondary-btn" id="saveDraft">Salvar rascunho</button> <button class="primary-btn" id="sendBlocked">Enviar</button></div></div>
+  </div>`;
+  document.body.appendChild(wrap);
+  document.getElementById('closeComposer').onclick = () => wrap.remove();
+  wrap.addEventListener('click', e => { if(e.target === wrap) wrap.remove(); });
+  document.getElementById('saveDraft').onclick = () => {
+    const s = loadState();
+    s.drafts.unshift({ id: crypto.randomUUID(), to: document.getElementById('to').value, subject: document.getElementById('subject').value, body: document.getElementById('body').value, createdAt: new Date().toISOString() });
+    saveState(s); wrap.remove(); toast('Rascunho salvo.'); if (s.folder==='drafts') renderMailbox();
+  };
+  document.getElementById('sendBlocked').onclick = () => toast('Conecte um domínio para liberar o envio real.');
+}
+
+function renderSettings() {
+  const state = loadState();
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="page-head"><div><h2>Configurações</h2><p>Estado atual da sua caixa Calazans Mail.</p></div><div class="status-pill"><span class="dot"></span> Modo inicial</div></div>
+    <div class="settings-grid">
+      <div class="panel settings-card"><h3>Endereço de e-mail</h3><p>Seu nome de domínio ainda não foi escolhido. Assim que ele for conectado, definiremos o endereço real.</p>
+        <div class="setting-line"><span>Identidade desejada</span><strong>@calazans</strong></div>
+        <div class="setting-line"><span>Domínio</span><span class="state off">Não conectado</span></div>
+        <div class="setting-line"><span>Recebimento</span><span class="state off">Desligado</span></div>
+        <div class="setting-line"><span>Envio</span><span class="state off">Desligado</span></div>
+      </div>
+      <div class="panel settings-card"><h3>Segurança</h3><p>Esta versão usa bloqueio local no navegador. Antes de ativar e-mail real, a autenticação será movida para um backend seguro.</p>
+        <div class="setting-line"><span>Senha local</span><span class="state on">Ativa</span></div>
+        <div class="setting-line"><span>2FA</span><span class="state off">Próxima etapa</span></div>
+        <div class="setting-line"><span>Sessão</span><button class="secondary-btn" id="lockNow">Bloquear agora</button></div>
+      </div>
+      <div class="panel settings-card"><h3>Aparência</h3><p>O painel funciona em celular e computador e possui tema claro e escuro.</p>
+        <div class="setting-line"><span>Tema atual</span><strong>${state.theme === 'dark' ? 'Escuro' : 'Claro'}</strong></div>
+        <div class="setting-line"><span>Layout mobile</span><span class="state on">Responsivo</span></div>
+      </div>
+      <div class="panel settings-card"><h3>Próxima conexão</h3><p>Para receber códigos de Instagram, Facebook e TikTok, o próximo passo será conectar um domínio e um serviço de entrega de e-mail ao painel.</p>
+        <div class="setting-line"><span>Caixa pronta para integração</span><span class="state on">Sim</span></div>
+        <div class="setting-line"><span>Mensagens fictícias</span><span class="state on">Nenhuma</span></div>
+      </div>
+    </div>`;
+  document.getElementById('lockNow').onclick = () => { setLoggedIn(false); renderLogin(); };
+}
+
+(function boot(){
+  const state = loadState();
+  if (!state) renderSetup();
+  else if (!isLoggedIn()) renderLogin();
+  else renderMailbox();
+})();
+
+</script>
+</body>
+</html>
